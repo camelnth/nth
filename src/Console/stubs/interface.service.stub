@@ -1,0 +1,60 @@
+<?php
+
+namespace #Namespace;
+
+/**
+ * Interface #InterfaceName
+ *
+ * @package #Namespace
+ */
+interface #InterfaceName
+{
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function all($data);
+
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function getList($data);
+
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function show($data);
+
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function showBy($data);
+
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function store($data);
+
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function update($data);
+
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function destroy($data);
+}

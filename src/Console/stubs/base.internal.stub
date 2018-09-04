@@ -1,0 +1,276 @@
+<?php
+
+namespace #Namespace;
+
+use Illuminate\Support\Collection;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+
+/**
+ * Class BaseInternalService
+ *
+ * @package App\Services\Internals
+ */
+abstract class BaseInternalService
+{
+    /**
+     * @var object $repository
+     */
+    protected $repository;
+
+    /**
+     * @var array $options
+     */
+    protected $options;
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function all($data)
+    {
+        return $this->repository->all($this->response($data, $this->options));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function getList($data)
+    {
+        return $this->repository->getList($this->response($data, $this->options));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function show($data)
+    {
+        return $this->repository->find($this->response($data, $this->options));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function showBy($data)
+    {
+        return $this->repository->first($this->response($data, $this->options));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function store($data)
+    {
+        return $this->repository->create($this->response($data, $this->options));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function update($data)
+    {
+        return $this->repository->update($this->response($data, $this->options));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function destroy($data)
+    {
+        return $this->repository->destroy($this->response($data, $this->options));
+    }
+
+    /**
+     * @param $option
+     *
+     * @return $this
+     */
+    protected function setOption($option)
+    {
+        $this->options = $this->checkParameter($option);
+
+        return $this;
+    }
+
+    /**
+     * @param $data
+     * @param $options
+     *
+     * @return object
+     */
+    protected function response($data, $options = [])
+    {
+        $data = $this->checkParameter($data);
+
+        return new RepositoryResponse($data, $options);
+    }
+
+    /**
+     * @param $param
+     *
+     * @return array
+     */
+    private function checkParameter($param)
+    {
+        switch (true) {
+            case $param instanceof Collection:
+                $param = $param->toArray();
+                break;
+
+            case $param instanceof \stdClass:
+                $param = (array) $param;
+                break;
+
+            case empty($param):
+                $param = [];
+                break;
+
+            case is_array($param):
+                break;
+
+            default:
+                throw new InvalidParameterException('Params invalid !');
+                break;
+        }
+
+        return $param;
+    }
+}
+
+/**
+ * Class RepositoryResponse
+ *
+ * @package App\Services\Internals
+ */
+class RepositoryResponse
+{
+    protected $data;
+    protected $options;
+
+    /**
+     * CamelResponse constructor.
+     *
+     * @param $data
+     * @param $options
+     */
+    public function __construct($data, $options)
+    {
+        $this->data = $data;
+        $this->options = $options;
+    }
+
+    /**
+     * Lấy data trong params
+     *
+     * @param $key
+     *
+     * @return null
+     */
+    public function get($key = null)
+    {
+        if (!empty($key)) {
+            return isset($this->data[$key]) ? $this->data[$key] : null;
+        }
+
+        return (! empty($this->data)) ? $this->data : null;
+    }
+
+    /**
+     * Lấy params trong options
+     *
+     * @param $key
+     *
+     * @return null
+     */
+    public function option($key = null)
+    {
+        if (!empty($key)) {
+            return isset($this->options[$key]) ? $this->options[$key] : null;
+        }
+
+        return (! empty($this->options)) ? $this->options : null;
+    }
+
+    /**
+     * Get all params request
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return [
+            'data' => $this->data,
+            'options' => $this->options
+        ];
+    }
+
+    /**
+     * @param $key
+     * @param null $value
+     *
+     * @return null
+     */
+    public function set($key, $value = null)
+    {
+        if (is_array($key)) {
+            return $this->setData($key);
+        }
+
+        $this->data[$key] = $value;
+
+        return $this->get();
+    }
+
+    /**
+     * @param $data
+     *
+     * @return array
+     */
+    private function setData($data)
+    {
+        array_merge($this->data, $data);
+
+        return $this->get();
+    }
+
+    /**
+     * @param $key
+     * @param null $value
+     *
+     * @return null
+     */
+    public function setOption($key, $value = null)
+    {
+        if (is_array($key)) {
+            return $this->setOptions($key);
+        }
+
+        $this->options[$key] = $value;
+
+        return $this->option();
+    }
+
+    /**
+     * @param $data
+     *
+     * @return array
+     */
+    private function setOptions($data)
+    {
+        array_merge($this->options, $data);
+
+        return $this->option();
+    }
+}

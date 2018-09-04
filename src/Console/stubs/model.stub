@@ -1,0 +1,30 @@
+<?php
+
+namespace #Namespace;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Class #ModelName
+ *
+ * @package #Namespace
+ */
+class #ModelName extends Model
+{
+    /**
+     * @var string
+     */
+    protected $table = '#TableName';
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        #Fillable
+    ];
+
+    /**
+     * @var bool
+     */
+    public $timestamps = true;
+}

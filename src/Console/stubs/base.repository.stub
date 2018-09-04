@@ -1,0 +1,185 @@
+<?php
+
+namespace #Namespace;
+
+use Illuminate\Container\Container as Application;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+/**
+ * Class BaseRepository
+ *
+ * @package #Namespace
+ */
+abstract class BaseRepository
+{
+    /**
+     * @var Application
+     */
+    protected $app;
+
+    /**
+     * @var Model
+     */
+    protected $model;
+
+    /**
+     * BaseRepository constructor.
+     *
+     * @param Application $app
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+        $this->makeModel();
+    }
+
+    /**
+     * @return mixed
+     */
+    abstract function model();
+
+    /**
+     * @return Model
+     *
+     * @throws ModelNotFoundException
+     */
+    public function makeModel()
+    {
+        $model = $this->app->make($this->model());
+
+        if (!$model instanceof Model) {
+            throw new ModelNotFoundException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+        }
+
+        return $this->model = $model->newModelQuery();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->method('getModel');
+    }
+
+    /**
+     * @param $name
+     * @param $params
+     *
+     * @return mixed
+     */
+    public function method($name, $params = null)
+    {
+        if (empty($params)) {
+            return $this->model->{$name}();
+        }
+
+        if (! is_array($params)) {
+            return $this->model->{$name}($params);
+        }
+
+        return $this->model->{$name}(...$params);
+    }
+
+    /**
+     * @param object $params
+     *
+     * @return int
+     */
+    protected function getLimitPaginate($params)
+    {
+        return (! empty($params->option('limit'))) ? $params->option('limit') : 20;
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function all($params)
+    {
+        return $this->method('all');
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function getList($params)
+    {
+        return $this->method('paginate', $this->getLimitPaginate($params));
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function find($params)
+    {
+        return $this->method('find', $params->get('id'));
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function first($params)
+    {
+        return $this->method('first');
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function create($params)
+    {
+        return $this->method('create', [$params->get()]);
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function update($params)
+    {
+        return $this->method('update', [$params->get(), $params->option()]);
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function destroy($params)
+    {
+        return $this->getModel()->destroy($params->get('id'));
+    }
+}

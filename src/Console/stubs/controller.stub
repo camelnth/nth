@@ -1,0 +1,23 @@
+<?php
+
+namespace #Namespace;
+
+use #ServiceNamespace;
+
+/**
+ * Class #ControllerNameController
+ *
+ * @package #Namespace
+ */
+class #ControllerNameController extends Controller
+{
+    /**
+     * @var #ServiceNameInterface
+     */
+    protected $#VarService;
+
+    public function __construct(#ServiceNameInterface $#VarService)
+    {
+        $this->#VarService = $#VarService;
+    }
+}
