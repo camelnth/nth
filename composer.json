@@ -1,5 +1,5 @@
 {
-    "name": "nth/pattern",
+    "name": "camel/pattern",
     "description": "Pattern by service",
     "type": "library",
     "authors": [
@@ -17,5 +17,7 @@
             "Camel\\Pattern\\": "src/"
         },
         "files": []
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
