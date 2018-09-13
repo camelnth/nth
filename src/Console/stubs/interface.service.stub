@@ -7,7 +7,7 @@ namespace #Namespace;
  *
  * @package #Namespace
  */
-interface UserVideoServiceInterface
+interface #InterfaceName
 {
     /**
      * @param $data
