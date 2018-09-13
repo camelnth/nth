@@ -7,52 +7,61 @@ namespace #Namespace;
  *
  * @package #Namespace
  */
-interface #InterfaceName
+interface UserVideoServiceInterface
 {
     /**
-     * @param array $data
+     * @param $data
      *
      * @return mixed
      */
     public function all($data);
 
     /**
-     * @param array $data
+     * @param $data
      *
      * @return mixed
      */
     public function getList($data);
 
     /**
-     * @param array $data
+     * @param $data
      *
      * @return mixed
      */
     public function show($data);
 
     /**
-     * @param array $data
+     * @param $data
      *
      * @return mixed
      */
-    public function showBy($data);
+    public function getFirstBy($data);
 
     /**
-     * @param array $data
+     * @param $data
      *
      * @return mixed
      */
     public function store($data);
 
     /**
-     * @param array $data
+     * @param $data
+     * @param $option
      *
      * @return mixed
      */
-    public function update($data);
+    public function update($data, $option = null);
 
     /**
-     * @param array $data
+     * @param $data
+     * @param $option
+     *
+     * @return mixed
+     */
+    public function updateOrCreate($data, $option = null);
+
+    /**
+     * @param $data
      *
      * @return mixed
      */

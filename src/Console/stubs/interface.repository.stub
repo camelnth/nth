@@ -77,5 +77,15 @@ interface #InterfaceName
      *
      * @return mixed
      */
+    public function updateOrCreate($params);
+    
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
     public function destroy($params);
 }

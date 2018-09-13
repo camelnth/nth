@@ -49,7 +49,13 @@ abstract class BaseInternalService
      */
     public function show($data)
     {
-        return $this->repository->find($this->response($data, $this->options));
+        $item = $this->repository->find($this->response($data, $this->options));
+
+        if (empty($item)) {
+            throw new NotFoundHttpException();
+        }
+
+        return $item;
     }
 
     /**
@@ -57,39 +63,101 @@ abstract class BaseInternalService
      *
      * @return mixed
      */
-    public function showBy($data)
+    public function getFirstBy($data)
     {
         return $this->repository->first($this->response($data, $this->options));
     }
 
     /**
      * @param $data
-     *
      * @return mixed
+     *
+     * @throws \Exception
      */
     public function store($data)
     {
-        return $this->repository->create($this->response($data, $this->options));
+        try {
+            $create = $this->repository->create($this->response($data, $this->options));
+
+            if (empty($create)) {
+                throw new FailureHandlingException(__('exception.failure_handling'));
+            }
+
+            return $create;
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
     }
 
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
+     *
+     * @throws FailureHandlingException
      */
-    public function update($data)
+    public function update($data, $option = null)
     {
-        return $this->repository->update($this->response($data, $this->options));
+        try {
+            if ($option) {
+                $this->setOption($option);
+            }
+
+            $update = $this->repository->update($this->response($data, $this->options));
+
+            if ($update == 0) {
+                throw new FailureHandlingException(__('exception.failure_handling'));
+            }
+
+            return $update;
+        } catch (Exception $exception) {
+            throw $exception;
+        }
     }
 
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
+     *
+     * @throws FailureHandlingException
+     */
+    public function updateOrCreate($data, $option = null)
+    {
+    	try {
+            if ($option) {
+                $this->setOption($option);
+            }
+
+            $updateOrCreate = $this->repository->updateOrCreate($this->response($data, $this->options));
+
+            return $updateOrCreate;
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     *
+     * @throws \Exception
      */
     public function destroy($data)
     {
-        return $this->repository->destroy($this->response($data, $this->options));
+        try {
+            $delete = $this->repository->destroy($this->response($data, $this->options));
+
+            if ($delete == 0) {
+                throw new FailureHandlingException(__('exception.failure_handling'));
+            }
+
+            return $delete;
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
     }
 
     /**
@@ -112,9 +180,9 @@ abstract class BaseInternalService
      */
     protected function response($data, $options = [])
     {
-        $data = $this->checkParameter($data);
+        $input = $this->checkParameter($data);
 
-        return new RepositoryResponse($data, $options);
+        return new RepositoryResponse($input, $options);
     }
 
     /**
@@ -217,6 +285,25 @@ class RepositoryResponse
     }
 
     /**
+     * @param array $keys
+     *
+     * @return array|null
+     */
+    public function only($keys = [])
+    {
+        if (empty($keys)) {
+            return $this->get();
+        }
+
+        $results = [];
+        foreach ($keys as $key) {
+            $results = [$key => $this->get($key)];
+        }
+
+        return $results;
+    }
+
+    /**
      * @param $key
      * @param null $value
      *
@@ -274,3 +361,4 @@ class RepositoryResponse
         return $this->option();
     }
 }
+

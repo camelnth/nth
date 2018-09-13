@@ -58,6 +58,14 @@ abstract class BaseRepository
     /**
      * @return mixed
      */
+    public function resetModel()
+    {
+        return $this->makeModel();
+    }
+
+    /**
+     * @return mixed
+     */
     public function getModel()
     {
         return $this->method('getModel');
@@ -102,7 +110,24 @@ abstract class BaseRepository
      */
     public function all($params)
     {
-        return $this->method('all');
+        $this->filter($params);
+
+        return $this->method('get');
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function count($params)
+    {
+        $this->filter($params);
+
+        return $this->method('count');
     }
 
     /**
@@ -115,6 +140,8 @@ abstract class BaseRepository
      */
     public function getList($params)
     {
+        $this->filter($params);
+
         return $this->method('paginate', $this->getLimitPaginate($params));
     }
 
@@ -141,6 +168,8 @@ abstract class BaseRepository
      */
     public function first($params)
     {
+        $this->filter($params);
+
         return $this->method('first');
     }
 
@@ -167,7 +196,22 @@ abstract class BaseRepository
      */
     public function update($params)
     {
-        return $this->method('update', [$params->get(), $params->option()]);
+        $this->mask($params);
+
+        return $this->method('update', [$params->get()]);
+    }
+
+    /**
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    public function updateOrCreate($params)
+    {
+        return $this->method('updateOrCreate', [$params->option(), $params->get()]);
     }
 
     /**
@@ -180,6 +224,39 @@ abstract class BaseRepository
      */
     public function destroy($params)
     {
-        return $this->getModel()->destroy($params->get('id'));
+        $this->filter($params);
+
+        return $this->method('delete');
+    }
+
+    /**
+     * Filter for select
+     *
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    protected function filter($params)
+    {
+        return $this;
+    }
+
+    /**
+     * Filter for update
+     *
+     * @param object $params
+     *
+     * @internal params array $data
+     * @internal params array $options
+     *
+     * @return mixed
+     */
+    protected function mask($params)
+    {
+        return $this;
     }
 }
+
