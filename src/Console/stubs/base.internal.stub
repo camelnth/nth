@@ -24,30 +24,41 @@ abstract class BaseInternalService
 
     /**
      * @param $data
+     * @param $options
      *
-     * @return mixed
+     * @return object
      */
-    public function all($data)
+    public function all($data, $option = null)
     {
+        if ($option) {
+            $this->setOption($option);
+        }
+
         return $this->repository->all($this->response($data, $this->options));
     }
 
     /**
      * @param $data
+     * @param $options
      *
-     * @return mixed
+     * @return object
      */
-    public function getList($data)
+    public function getList($data, $option = null)
     {
+        if ($option) {
+            $this->setOption($option);
+        }
+
         return $this->repository->getList($this->response($data, $this->options));
     }
 
     /**
      * @param $data
+     * @param $options
      *
-     * @return mixed
+     * @return object
      */
-    public function show($data)
+    public function show($data, $option = null)
     {
         $item = $this->repository->find($this->response($data, $this->options));
 
@@ -60,22 +71,33 @@ abstract class BaseInternalService
 
     /**
      * @param $data
+     * @param $options
      *
-     * @return mixed
+     * @return object
      */
-    public function getFirstBy($data)
+    public function getFirstBy($data, $option = null)
     {
+        if ($option) {
+            $this->setOption($option);
+        }
+
         return $this->repository->first($this->response($data, $this->options));
     }
 
     /**
      * @param $data
-     * @return mixed
+     * @param $options
+     *
+     * @return object
      *
      * @throws \Exception
      */
-    public function store($data)
+    public function store($data, $option = null)
     {
+        if ($option) {
+            $this->setOption($option);
+        }
+
         try {
             $create = $this->repository->create($this->response($data, $this->options));
 
@@ -141,12 +163,18 @@ abstract class BaseInternalService
 
     /**
      * @param $data
-     * @return mixed
+     * @param $options
+     *
+     * @return object
      *
      * @throws \Exception
      */
-    public function destroy($data)
+    public function destroy($data, $option = null)
     {
+        if ($option) {
+            $this->setOption($option);
+        }
+
         try {
             $delete = $this->repository->destroy($this->response($data, $this->options));
 
@@ -180,7 +208,7 @@ abstract class BaseInternalService
      */
     protected function response($data, $options = [])
     {
-        $input = $this->checkParameter($data);
+        $input = $this->checkParameter($data, $option = null);
 
         return new RepositoryResponse($input, $options);
     }
@@ -325,7 +353,7 @@ class RepositoryResponse
      *
      * @return array
      */
-    private function setData($data)
+    private function setData($data, $option = null)
     {
         array_merge($this->data, $data);
 
@@ -354,7 +382,7 @@ class RepositoryResponse
      *
      * @return array
      */
-    private function setOptions($data)
+    private function setOptions($data, $option = null)
     {
         array_merge($this->options, $data);
 

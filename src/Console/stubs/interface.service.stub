@@ -11,38 +11,43 @@ interface #InterfaceName
 {
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
      */
-    public function all($data);
+    public function all($data, $option = null);
 
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
      */
-    public function getList($data);
+    public function getList($data, $option = null);
 
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
      */
-    public function show($data);
+    public function show($data, $option = null);
 
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
      */
-    public function getFirstBy($data);
+    public function getFirstBy($data, $option = null);
 
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
      */
-    public function store($data);
+    public function store($data, $option = null);
 
     /**
      * @param $data
@@ -62,8 +67,9 @@ interface #InterfaceName
 
     /**
      * @param $data
+     * @param $option
      *
      * @return mixed
      */
-    public function destroy($data);
+    public function destroy($data, $option = null);
 }
