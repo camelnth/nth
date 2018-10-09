@@ -11,65 +11,65 @@ interface #InterfaceName
 {
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function all($data, $option = null);
+    public function all($data, $options = null);
 
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function getList($data, $option = null);
+    public function getList($data, $options = null);
 
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function show($data, $option = null);
+    public function show($data, $options = null);
 
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function getFirstBy($data, $option = null);
+    public function getFirstBy($data, $options = null);
 
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function store($data, $option = null);
+    public function store($data, $options = null);
 
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function update($data, $option = null);
+    public function update($data, $options = null);
 
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function updateOrCreate($data, $option = null);
+    public function updateOrCreate($data, $options = null);
 
     /**
      * @param $data
-     * @param $option
+     * @param $options
      *
      * @return mixed
      */
-    public function destroy($data, $option = null);
+    public function destroy($data, $options = null);
 }

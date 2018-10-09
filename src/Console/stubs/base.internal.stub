@@ -28,10 +28,10 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function all($data, $option = null)
+    public function all($data, $options = null)
     {
-        if ($option) {
-            $this->setOption($option);
+        if ($options) {
+            $this->setOption($options);
         }
 
         return $this->repository->all($this->response($data, $this->options));
@@ -43,10 +43,10 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function getList($data, $option = null)
+    public function getList($data, $options = null)
     {
-        if ($option) {
-            $this->setOption($option);
+        if ($options) {
+            $this->setOption($options);
         }
 
         return $this->repository->getList($this->response($data, $this->options));
@@ -58,8 +58,12 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function show($data, $option = null)
+    public function show($data, $options = null)
     {
+        if ($options) {
+            $this->setOption($options);
+        }
+    
         $item = $this->repository->find($this->response($data, $this->options));
 
         if (empty($item)) {
@@ -75,10 +79,10 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function getFirstBy($data, $option = null)
+    public function getFirstBy($data, $options = null)
     {
-        if ($option) {
-            $this->setOption($option);
+        if ($options) {
+            $this->setOption($options);
         }
 
         return $this->repository->first($this->response($data, $this->options));
@@ -92,10 +96,10 @@ abstract class BaseInternalService
      *
      * @throws \Exception
      */
-    public function store($data, $option = null)
+    public function store($data, $options = null)
     {
-        if ($option) {
-            $this->setOption($option);
+        if ($options) {
+            $this->setOption($options);
         }
 
         try {
@@ -119,11 +123,11 @@ abstract class BaseInternalService
      *
      * @throws FailureHandlingException
      */
-    public function update($data, $option = null)
+    public function update($data, $options = null)
     {
         try {
-            if ($option) {
-                $this->setOption($option);
+            if ($options) {
+                $this->setOption($options);
             }
 
             $update = $this->repository->update($this->response($data, $this->options));
@@ -133,7 +137,7 @@ abstract class BaseInternalService
             }
 
             return $update;
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             throw $exception;
         }
     }
@@ -146,17 +150,17 @@ abstract class BaseInternalService
      *
      * @throws FailureHandlingException
      */
-    public function updateOrCreate($data, $option = null)
+    public function updateOrCreate($data, $options = null)
     {
     	try {
-            if ($option) {
-                $this->setOption($option);
+            if ($options) {
+                $this->setOption($options);
             }
 
             $updateOrCreate = $this->repository->updateOrCreate($this->response($data, $this->options));
 
             return $updateOrCreate;
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             throw $exception;
         }
     }
@@ -169,10 +173,10 @@ abstract class BaseInternalService
      *
      * @throws \Exception
      */
-    public function destroy($data, $option = null)
+    public function destroy($data, $options = null)
     {
-        if ($option) {
-            $this->setOption($option);
+        if ($options) {
+            $this->setOption($options);
         }
 
         try {
@@ -189,13 +193,13 @@ abstract class BaseInternalService
     }
 
     /**
-     * @param $option
+     * @param $options
      *
      * @return $this
      */
-    protected function setOption($option)
+    protected function setOption($options)
     {
-        $this->options = $this->checkParameter($option);
+        $this->options = $this->checkParameter($options);
 
         return $this;
     }
@@ -208,7 +212,7 @@ abstract class BaseInternalService
      */
     protected function response($data, $options = [])
     {
-        $input = $this->checkParameter($data, $option = null);
+        $input = $this->checkParameter($data, $options = null);
 
         return new RepositoryResponse($input, $options);
     }
@@ -353,7 +357,7 @@ class RepositoryResponse
      *
      * @return array
      */
-    private function setData($data, $option = null)
+    private function setData($data, $options = null)
     {
         array_merge($this->data, $data);
 
@@ -382,7 +386,7 @@ class RepositoryResponse
      *
      * @return array
      */
-    private function setOptions($data, $option = null)
+    private function setOptions($data, $options = null)
     {
         array_merge($this->options, $data);
 
