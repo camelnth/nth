@@ -212,7 +212,7 @@ abstract class BaseInternalService
      */
     protected function response($data, $options = [])
     {
-        $input = $this->checkParameter($data, $options = null);
+        $input = $this->checkParameter($data);
 
         return new RepositoryResponse($input, $options);
     }
