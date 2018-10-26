@@ -64,7 +64,8 @@ abstract class BaseInternalService
             $this->setOption($options);
         }
 
-        if (empty($data->get('id'))) {
+        $data = $this->checkParameter($data);
+        if (! isset($data['id'])) {
             throw new NotFoundHttpException();
         }
         
