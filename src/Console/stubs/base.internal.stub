@@ -34,7 +34,7 @@ abstract class BaseInternalService
             $this->setOption($options);
         }
 
-        return $this->repository->all($this->response($data, $this->options));
+        return $this->repository->all($this->response($data));
     }
 
     /**
@@ -49,7 +49,7 @@ abstract class BaseInternalService
             $this->setOption($options);
         }
 
-        return $this->repository->getList($this->response($data, $this->options));
+        return $this->repository->getList($this->response($data));
     }
 
     /**
@@ -63,8 +63,12 @@ abstract class BaseInternalService
         if ($options) {
             $this->setOption($options);
         }
-    
-        $item = $this->repository->find($this->response($data, $this->options));
+
+        if (empty($data->get('id'))) {
+            throw new NotFoundHttpException();
+        }
+        
+        $item = $this->repository->find($this->response($data));
 
         if (empty($item)) {
             throw new NotFoundHttpException();
@@ -85,7 +89,7 @@ abstract class BaseInternalService
             $this->setOption($options);
         }
 
-        return $this->repository->first($this->response($data, $this->options));
+        return $this->repository->first($this->response($data));
     }
 
     /**
@@ -103,7 +107,7 @@ abstract class BaseInternalService
         }
 
         try {
-            $create = $this->repository->create($this->response($data, $this->options));
+            $create = $this->repository->create($this->response($data));
 
             if (empty($create)) {
                 throw new FailureHandlingException(__('exception.failure_handling'));
@@ -117,11 +121,11 @@ abstract class BaseInternalService
 
     /**
      * @param $data
-     * @param $option
+     * @param null $options
      *
      * @return mixed
      *
-     * @throws FailureHandlingException
+     * @throws \Exception
      */
     public function update($data, $options = null)
     {
@@ -130,7 +134,7 @@ abstract class BaseInternalService
                 $this->setOption($options);
             }
 
-            $update = $this->repository->update($this->response($data, $this->options));
+            $update = $this->repository->update($this->response($data));
 
             if ($update == 0) {
                 throw new FailureHandlingException(__('exception.failure_handling'));
@@ -144,11 +148,11 @@ abstract class BaseInternalService
 
     /**
      * @param $data
-     * @param $option
+     * @param null $options
      *
      * @return mixed
      *
-     * @throws FailureHandlingException
+     * @throws \Exception
      */
     public function updateOrCreate($data, $options = null)
     {
@@ -157,7 +161,7 @@ abstract class BaseInternalService
                 $this->setOption($options);
             }
 
-            $updateOrCreate = $this->repository->updateOrCreate($this->response($data, $this->options));
+            $updateOrCreate = $this->repository->updateOrCreate($this->response($data));
 
             return $updateOrCreate;
         } catch (\Exception $exception) {
@@ -180,7 +184,7 @@ abstract class BaseInternalService
         }
 
         try {
-            $delete = $this->repository->destroy($this->response($data, $this->options));
+            $delete = $this->repository->destroy($this->response($data));
 
             if ($delete == 0) {
                 throw new FailureHandlingException(__('exception.failure_handling'));
@@ -206,15 +210,14 @@ abstract class BaseInternalService
 
     /**
      * @param $data
-     * @param $options
      *
      * @return object
      */
-    protected function response($data, $options = [])
+    protected function response($data)
     {
         $input = $this->checkParameter($data);
 
-        return new RepositoryResponse($input, $options);
+        return new RepositoryResponse($input, $this->options ?? []);
     }
 
     /**
