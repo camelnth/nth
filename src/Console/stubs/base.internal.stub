@@ -28,7 +28,7 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function all($data, $options = null)
+    public function all($data = null, $options = null)
     {
         if ($options) {
             $this->setOption($options);
@@ -43,7 +43,7 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function getList($data, $options = null)
+    public function getList($data = null, $options = null)
     {
         if ($options) {
             $this->setOption($options);
@@ -58,7 +58,7 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function show($data, $options = null)
+    public function show($data = null, $options = null)
     {
         if ($options) {
             $this->setOption($options);
@@ -68,7 +68,7 @@ abstract class BaseInternalService
         if (! isset($data['id'])) {
             throw new NotFoundHttpException();
         }
-        
+
         $item = $this->repository->find($this->response($data));
 
         if (empty($item)) {
@@ -84,7 +84,7 @@ abstract class BaseInternalService
      *
      * @return object
      */
-    public function getFirstBy($data, $options = null)
+    public function getFirstBy($data = null, $options = null)
     {
         if ($options) {
             $this->setOption($options);
@@ -101,7 +101,7 @@ abstract class BaseInternalService
      *
      * @throws \Exception
      */
-    public function store($data, $options = null)
+    public function store($data = null, $options = null)
     {
         if ($options) {
             $this->setOption($options);
@@ -128,7 +128,7 @@ abstract class BaseInternalService
      *
      * @throws \Exception
      */
-    public function update($data, $options = null)
+    public function update($data = null, $options = null)
     {
         try {
             if ($options) {
@@ -155,7 +155,7 @@ abstract class BaseInternalService
      *
      * @throws \Exception
      */
-    public function updateOrCreate($data, $options = null)
+    public function updateOrCreate($data = null, $options = null)
     {
     	try {
             if ($options) {
@@ -178,7 +178,7 @@ abstract class BaseInternalService
      *
      * @throws \Exception
      */
-    public function destroy($data, $options = null)
+    public function destroy($data = null, $options = null)
     {
         if ($options) {
             $this->setOption($options);
@@ -269,7 +269,7 @@ class RepositoryResponse
      * @param $data
      * @param $options
      */
-    public function __construct($data, $options)
+    public function __construct($data = [], $options = [])
     {
         $this->data = $data;
         $this->options = $options;
@@ -361,7 +361,7 @@ class RepositoryResponse
      *
      * @return array
      */
-    private function setData($data, $options = null)
+    private function setData($data = null, $options = null)
     {
         array_merge($this->data, $data);
 
@@ -386,15 +386,14 @@ class RepositoryResponse
     }
 
     /**
-     * @param $data
+     * @param $options
      *
      * @return array
      */
-    private function setOptions($data, $options = null)
+    private function setOptions($options)
     {
-        array_merge($this->options, $data);
+        array_merge($this->options, $options);
 
         return $this->option();
     }
 }
-
