@@ -52,7 +52,7 @@ abstract class BaseRepository
             throw new ModelNotFoundException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
         }
 
-        return $this->model = $model->newModelQuery();
+        return $this->model = $model->newQuery();
     }
 
     /**
