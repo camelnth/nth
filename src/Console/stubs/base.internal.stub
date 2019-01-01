@@ -211,12 +211,17 @@ abstract class BaseInternalService
 
     /**
      * @param $data
+     * @param array $options
      *
-     * @return object
+     * @return RepositoryResponse
      */
-    protected function response($data)
+    protected function response($data, $options = [])
     {
         $input = $this->checkParameter($data);
+
+        if (! empty($options)) {
+            $this->setOption($options);
+        }
 
         return new RepositoryResponse($input, $this->options ?? []);
     }
