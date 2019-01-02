@@ -205,7 +205,7 @@ abstract class BaseRepository
      */
     public function updateOrCreate($params)
     {
-        return $this->method('updateOrCreate', [$params->option(), $params->get()]);
+        return $this->method('updateOrCreate', $params->option(), $params->get());
     }
 
     /**
