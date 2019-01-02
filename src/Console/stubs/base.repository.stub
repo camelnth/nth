@@ -73,21 +73,15 @@ abstract class BaseRepository
 
     /**
      * @param $name
-     * @param $params
      *
      * @return mixed
      */
-    public function method($name, $params = null)
+    public function method($name)
     {
-        if (empty($params)) {
-            return $this->model->{$name}();
-        }
+        $argList = func_get_args();
+        unset($argList[0]);
 
-        if (! is_array($params)) {
-            return $this->model->{$name}($params);
-        }
-
-        return $this->model->{$name}(...$params);
+        return $this->model->{$name}(...$argList);
     }
 
     /**
@@ -183,7 +177,7 @@ abstract class BaseRepository
      */
     public function create($params)
     {
-        return $this->method('create', [$params->get()]);
+        return $this->method('create', $params->get());
     }
 
     /**
@@ -198,7 +192,7 @@ abstract class BaseRepository
     {
         $this->mask($params);
 
-        return $this->method('update', [$params->get()]);
+        return $this->method('update', $params->get());
     }
 
     /**
