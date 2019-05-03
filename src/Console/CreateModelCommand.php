@@ -54,7 +54,11 @@ class CreateModelCommand extends GeneratorCommand
     {
         $this->askTableName();
 
-        parent::handle();
+        try {
+            parent::handle();
+        } catch (\Exception $exception) {
+            parent::fire();
+        }
     }
 
     /**
